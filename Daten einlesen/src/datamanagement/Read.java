@@ -9,16 +9,16 @@ import org.jdom2.Document;
 import org.jdom2.JDOMException;
 import org.jdom2.Namespace;
 import org.jdom2.input.SAXBuilder;
+
 import org.jdom2.Element;
 
-import graph.Line;
-import graph.Node;
-import graph.POI;
+import graph.*;
 
 public class Read {
 	
 	public static void readNodes(String filename, ArrayList<Node> nodeList) {
 		Document document = null;
+		int maxId = 0;
 		long start = new Date().getTime();
 		try {
 			document = new SAXBuilder().build(filename);
@@ -41,16 +41,19 @@ public class Read {
 			Element child = children.get(i).getChild("Roads_Munich_Route_Node",fmeNs);
 			Element subchild = child.getChild("NODE_ID",fmeNs);
 			int nodeId = Integer.parseInt(subchild.getText());
+			if (nodeId > maxId) {
+				maxId = nodeId;
+			}
 			subchild = child.getChild("pointProperty",gmlNs).getChild("Point",gmlNs).getChild("pos",gmlNs);
 			String pos = subchild.getText();
 			String[] posSplit = pos.split(" ");
 			double y = Double.parseDouble(posSplit[0]);
 			double x = Double.parseDouble(posSplit[1]);
 			
-			Node node = new Node(nodeId,y,x);
+			Node node = new Node(nodeId,y,x,i);
 			nodeList.add(node);
 		}
-		
+		Node.setMaxId(maxId);
 	}
 	
 	public static void readLines(String filename, ArrayList<Line> lineList) {

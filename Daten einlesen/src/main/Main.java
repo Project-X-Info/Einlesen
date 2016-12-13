@@ -1,6 +1,9 @@
 package main;
 
 import java.util.ArrayList;
+
+import adjacencylist.*;
+
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -20,6 +23,15 @@ public class Main {
 		Read.readNodes("Roads_Munich_Route_Node.gml",nodeList);
 		Read.readLines("Roads_Munich_Route_Line.gml",lineList);
 		Read.readPOIs("Points_Munich_Route_POIs.gml",POIList);
+		
+		Graph_AdjList graph = new Graph_AdjList();
+		graph.setNodeArray_id(nodeList);
+		graph.initAdjacencyList();
+		graph.setLines(lineList);
+		
+		
+		graph.printAdjacencylist();
+		
 		//System.out.println("Test");
 		
 		/* PROBECODE AUSGABE TXT-FILE
